@@ -1,0 +1,23 @@
+# Machine-specific, regenerates on first recall
+Vault/Memory/.embed_cache.json
+
+# Local backups — not needed remotely
+Vault/Memory/.history/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# OS junk
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Environment
+.env

@@ -1,0 +1,121 @@
+GHOST: WHAT WE DID TODAY — EXPLAINED LIKE YOU'RE 10
+=====================================================
+
+WHAT IS GHOST?
+--------------
+Ghost is our very own pretend robot helper that lives inside the
+computer! It reads files, searches the web, and remembers things —
+kind of like a super-smart diary that talks back.
+
+WHAT'S "OBSIDIAN_MEMORY.PY"?
+-----------------------------
+Think of Ghost's memory like a LEGO box full of little note cards.
+obsidian_memory.py is the little helper program that puts new cards
+in the box (add), swaps old cards for newer ones (update), and digs
+around in the box to find the right card later (recall). It just got
+upgraded from version 2 to version 3 — like getting a shinier,
+smarter robot upgrade pack!
+
+WHAT DID VERSION 3 ADD?
+-----------------------
+Imagine giving your robot better tools:
+
+1. ADD WORKS! — We actually tried putting a brand new memory in,
+   from start to finish, and it worked! Ghost remembered a new fact
+   like a champ.
+
+2. UPDATE WORKS! — When Ghost learns something new about a fact it
+   already knows, it swaps in the new version. BUT it was smart: it
+   saved a copy of the OLD version in a special folder called
+   ".history" (like a "save point" in a video game) before changing
+   anything. And the old fact was still kept safe!
+
+3. LEARN --DRY-RUN — This is like a "practice run" button. Before
+   Ghost writes anything new into its memory, it can do a pretend
+   run first to check that everything makes sense. Like trying on
+   shoes before buying them.
+
+4. RESTORE — If Ghost ever mess up its notes, it can "time travel"
+   back to the saved old version from .history. Like an undo button
+   for your whole brain!
+
+5. DOCTOR — A check-up button! It scans the memory box to make sure
+   all the note cards are healthy and nothing got squished.
+
+6. KEYWORD FALLBACK — If the big AI brain (Ollama) falls asleep or
+   stops working, Ghost doesn't just freeze up. It switches to a
+   simpler way of finding notes — just matching keywords, like
+   searching for a word in a cartoon's word search puzzle.
+
+7. SHRINK CHECK — This is a safety guard. Sometimes the AI might
+   rewrite a note and accidentally make it way shorter — like turning
+   a whole story into one tiny sentence. The shrink check says: "Whoa,
+   that new version is less than HALF the size of the old one? Not
+   allowed!" and refuses the change.
+
+WHAT'S ALREADY TESTED AND WORKING?
+----------------------------------
+- Ghost can use its real tools: reading files, listing folders,
+  searching the web — all confirmed working!
+- It answered a real current-events question (who coaches Portugal's
+  national team) by actually searching the web instead of just
+  guessing. Smart!
+- add() worked end-to-end through OpenCode (the software Ghost uses
+  to do stuff) with its local brain qwen2.5:3b and its memory-smell
+  engine nomic-embed-text.
+- update() worked on a real memory note, and the old version was
+  safely backed up.
+- learn --dry-run exists and does its safety checks.
+
+WHAT'S STILL TO TEST?
+---------------------
+These are built but we haven't tried them on a real run yet:
+- The keyword fallback (does Ghost still remember stuff when
+  Ollama is turned off?)
+- The shrink check (does it REALLY stop tiny squished rewrites?)
+- restore (can it really bring back an old version of a note?)
+
+WHAT'S NOT BUILT YET?
+---------------------
+- A voice layer! Wake word, microphone, talking back — the true
+  "Tony Stark talking to the room" dream. Not started.
+- Wiring recall/learn into Ghost's actual chat loop — right now a
+  human (us) has to tell Ghost to use its memory. It should do that
+  on its own soon.
+- Testing file writes and shell commands, so we know Ghost's safety
+  rules actually hold up when it can change things.
+- Auto-loading the GHOST.md "instruction sheet" on startup instead
+  of pasting it in by hand.
+
+WHAT GOT MOVED TO "DONE"?
+-------------------------
+- add() works end-to-end.
+- update() works, with old version backed up.
+- learn --dry-run exists and checks safety.
+- restore is built.
+- doctor is built.
+- keyword fallback is built.
+- shrink check is built.
+
+WHAT'S IN KNOWN ISSUES (STILL NOT PERFECT)?
+-------------------------------------------
+- OpenCode doesn't automatically read GHOST.md, so we have to feed
+  it the instructions at the start of every session.
+- Ghost's brain is partly on the internet now (not totally local),
+  which is a tradeoff we accepted for now.
+- Ghost's memory still isn't automatic — we have to ask it to
+  remember/recall things each time. recall and learn are not wired
+  into the chat loop yet.
+- If the little brain that makes learn() decisions gets confused
+  and makes up JSON, it might save the same info twice (duplicate
+  notes over time).
+- Some safety features (shrink check, restore, offline fallback)
+  are built but NOT yet tested in real use.
+
+THE BIG PICTURE
+---------------
+Ghost is like a robot pet: we gave it a shinier brain upgrade
+(version 3 memory), proved it can learn and update facts safely,
+and built emergency guards (undo, doctor, shrink check, offline
+backup plan). Next big step: teaching it to use its own memory
+without us reminding it every time — and someday, letting it talk!
