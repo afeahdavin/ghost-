@@ -21,3 +21,14 @@ desktop.ini
 
 # Environment
 .env
+# Obsidian local settings (machine-specific)
+Vault/.obsidian/
+**/.obsidian/
+
+# Ghost brain scratch folder (if not wanted)
+ghost brain/
+
+# PES / gaming scripts (not part of Ghost)
+run-backup.reg
+run_pes_boost_elevated.cmd
+run_ps4_controller_elevated.cmd
