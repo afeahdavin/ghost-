@@ -20,7 +20,8 @@ Obsidian is installed and pointed at `C:\ghost\Vault`. It is the primary way the
 ## Vault layout
 
 - `01 - Daily Notes\` — one note per day, monthly subfolders (`NN - Month YYYY`), filename `YYYY-MM-DD.md`
-- `Projects\` — one note per ongoing project. Currently: `Ghost.md`
+- `Projects\` — one note per ongoing project. Currently: `Ghost.md`, `Football Content Channel.md`, `Jarvis.md`, `PES Boost.md`, `PS4 Controller Input Lag.md`, `PES Transfer Updater.md`
+- `Jobs\` — one master note per recurring job. Currently: `Daily Startup Sequence.md`, `Daily Note Opener.md`, `Weekly Vault Health Check.md`, `Active Priorities Review.md`, `Yesterday Backfill.md`
 - `Memory\` — long-term notes written by `obsidian_memory.py`
 - `Active Priorities.md` — live list of open work
 

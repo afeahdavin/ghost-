@@ -1,0 +1,31 @@
+Traceback (most recent call last):
+  File "C:\Users\afeah\Desktop\PES 2025\pes_boost_loop.py", line 153, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\afeah\Desktop\PES 2025\pes_boost_loop.py", line 121, in main
+    launch_pes()
+    ~~~~~~~~~~^^
+  File "C:\Users\afeah\Desktop\PES 2025\pes_boost_loop.py", line 88, in launch_pes
+    subprocess.Popen(PES_PATH, cwd=os.path.dirname(PES_PATH))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\subprocess.py", line 1039, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python314\Lib\subprocess.py", line 1553, in _execute_child
+    hp, ht, pid, tid = _winapi.CreateProcess(executable, args,
+                       ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+                             # no special security
+                             ^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+                             cwd,
+                             ^^^^
+                             startupinfo)
+                             ^^^^^^^^^^^^
+OSError: [WinError 740] The requested operation requires elevation

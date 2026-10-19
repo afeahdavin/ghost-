@@ -11,13 +11,15 @@ The local agent system itself — this document tracks its own build.
   auto-executes on a fresh session.
 - **Memory:** this vault, at `C:\ghost\Vault`.
 - **Human interface:** Obsidian, pointed at `C:\ghost\Vault`.
-- **Retrieval:** `C:\ghost\obsidian_memory.py` — v3, Ollama embeddings
+- **Retrieval:** `C:\ghost\obsidian_memory.py` — v3.1, Ollama embeddings
   (`nomic-embed-text`) with a cached vector store and an LLM-driven
   `learn()` helper that decides add/update/ignore. Adds `--dry-run` on
   `learn`, `restore`, `doctor`, keyword fallback when Ollama is down,
-  and a rewrite-shrink check (rejects rewrites under 50% of old length).
-  recall/learn behaviour is defined in the GHOST.md Memory section and
-  passed testing.
+  a rewrite-shrink check (rejects rewrites under 50% of old length),
+  collision-proof `.history` backups, and a code-level `--yes` gate on
+  `restore` (preview without it; refuses to run without it). Shrink check
+  and `restore` tested on real runs (2026-10-09). recall/learn behaviour
+  is defined in the GHOST.md Memory section and passed testing.
 
 ## Hands: tested and working (OpenCode + Fledge Alpha Free)
 
@@ -42,8 +44,13 @@ The local agent system itself — this document tracks its own build.
       a screenshot: recall ran on its own, semantic search returned
       the correct top hit, startup sequence ran first without being
       asked.
-- [ ] Not yet tested: multi-step chained tasks, and destructive-action
-      confirmation gates beyond overwrite and restore.
+- [x] Multi-step chained tasks — tested 2026-10-15 (multi-tool evidence
+      gathering across files in one session, then a coordinated
+      multi-edit vault update).
+- [ ] Destructive-action confirmation gates beyond overwrite and restore
+      — `Vault\Memory\` writes now hard-denied via `opencode.json`
+      permissions (verified live 2026-10-15); other destructive actions
+      remain prompt-level only.
 
 ## Hands: tested and rejected (Qwen Code + local Ollama)
 
@@ -64,17 +71,19 @@ The local agent system itself — this document tracks its own build.
 - Auto-loading of `GHOST.md` was previously a critical gap; fixed by
   adding `GHOST.md` to `opencode.json` `"instructions"`. Startup
   sequence now auto-executes.
-- `Vault\Memory\` is written only via `obsidian_memory.py`, but that
-  enforcement is prompt-level. Ghost's file tools could still write
-  there directly. Real enforcement would need a file-level lock or
-  wrapper.
+- `Vault\Memory\` enforcement upgraded from prompt-level to code-level:
+  `opencode.json` permissions deny edit/write/patch on `Vault/Memory`
+  and `Vault/Memory/**`. Verified live 2026-10-15 — OpenCode itself
+  blocked a direct write attempt. The GHOST.md prompt rule remains as
+  the second layer.
 - A fresh terminal session starts as vanilla OpenCode unless launched
   with the Ghost project/config loaded. Auto-load now works through
   `opencode.json`, but persona adoption still depends on this project
   context being active.
-- The restore command has no confirmation gate inside
-  `obsidian_memory.py` itself. If Ghost ignores the rule, restore fires
-  immediately. Same prompt-level limit as the overwrite gate.
+- Restore confirmation gate now exists in code: the CLI refuses without
+  `--yes`, and the `restore()` function refuses unless `yes=True`. An
+  agent that deliberately passes `--yes` can still bypass it; the
+  GHOST.md rule (preview first, separate go-ahead) is the second layer.
 - Overwrite confirmation gate under OpenCode: previous FAILED result
   was invalid because `GHOST.md` was not loaded — OpenCode was running
   as vanilla OpenCode. Corrected test with `GHOST.md` loaded PASSED.
@@ -86,20 +95,16 @@ The local agent system itself — this document tracks its own build.
   offline-only becomes a hard requirement. Fledge Alpha's data policy
   is unknown. Assume anything read or recalled is sent to the provider
   and may be retained.
-- `obsidian_memory.py` v3 still depends on Ollama running with both
+- `obsidian_memory.py` v3.1 still depends on Ollama running with both
   `nomic-embed-text` (for embeddings) and `qwen2.5:3b` (for the
   `learn()` decision step). If the chat model hallucinates JSON, the
   `learn()` fallback still saves the info as a new note — which can
   cause duplicate notes over time.
-- Rewrite corruption risk on `learn()` update is now mitigated (old
-  versions backed up to `.history`, `restore` and `doctor` built,
-  shrink check rejects rewrites under 50% of old length), but the
-  shrink check and `restore` are not yet tested on a real run.
-
-## Built, not yet tested
-
-- Rewrite-shrink check (rejects under 50% of old length).
-- `restore`.
+- Rewrite corruption risk on `learn()` update is mitigated (old
+  versions backed up to `.history` with collision-proof names, `restore`
+  and `doctor` built, shrink check rejects rewrites under 50% of old
+  length). Shrink check and `restore` tested on real runs 2026-10-09
+  (`.history` shows repeated update/restore cycles on `favorite-language`).
 
 ## Done
 
@@ -109,13 +114,14 @@ The local agent system itself — this document tracks its own build.
 - [x] `update()` on a real run — old version backed up to `.history`,
       old fact kept.
 - [x] `learn --dry-run` — exists and runs the safety checks.
-- [x] `restore` built.
+- [x] `restore` — built and tested; code-level gate: CLI and function
+      both refuse without `--yes` / `yes=True` (v3.1).
 - [x] `doctor` built.
 - [x] Keyword fallback when Ollama is down — confirmed on a real run:
       Ollama off, URLError warning shown, keyword search used, learn
       saved new notes via the fallback.
-- [x] Rewrite-shrink check — built, rejects rewrites under 50% of old
-      length.
+- [x] Rewrite-shrink check — rejects rewrites under 50% of old length;
+      tested on a real run 2026-10-09.
 - [x] Memory section live and tested — memory tests passed in a fresh
       session, verified by the user: recall runs on its own; learn runs
       `--dry-run` then asks "Save this?" and saves only after yes; an
@@ -126,17 +132,14 @@ The local agent system itself — this document tracks its own build.
 - [x] Startup sequence auto-executes on a fresh session — reads
       `VAULT-INDEX.md`, `Active Priorities.md`, checks daily note,
       then greets with the welcome line.
+- [x] Code-level lock on `Vault\Memory\` — `opencode.json` permissions
+      deny edit/write/patch on `Vault/Memory` and `Vault/Memory/**`;
+      verified live 2026-10-15 when OpenCode itself blocked a direct
+      write attempt.
 
 ## Not built yet
 
 - [ ] Voice / hands-free layer (wake word, mic input, text-to-speech) —
       the "Tony Stark talking to the room" piece. Not started.
-- [ ] Automatic memory wiring (MCP-server wrapper or equivalent) so
-      `remember` / `recall` / `learn` fire without being asked each
-      session. recall/learn behaviour is defined in the GHOST.md
-      Memory section and passed testing.
-- [ ] File-write and shell-command testing under OpenCode — confirm the
-      confirm-before-destructive-action rules actually hold up once
-      Ghost can modify things, not just read them.
 - [ ] Jobs\ folder structure — one master note per recurring task,
       providing the complete skill and context for that task.

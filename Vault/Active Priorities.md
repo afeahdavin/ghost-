@@ -6,6 +6,10 @@
 - [ ] Stress-test file writes and shell commands under OpenCode — verify the confirm-before-destructive-action rules actually hold
 - [ ] Decide long-term: cloud model vs local model vs both
 - [ ] Voice / hands-free layer
+- [ ] PES: run the game with BOTH DS4 pads wired and confirm controller-2 lag is
+      gone (software polling now even at <1 ms; see `Projects\PS4 Controller Input Lag.md`)
+- [ ] PES: launch the fixed `pes_boost_loop.py` elevated and confirm the temp
+      cleanup no longer crashes (waiting on user go signal)
 
 ## Done
 

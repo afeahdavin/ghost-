@@ -1,4 +1,10 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "instructions": ["GHOST.md"]
+  "instructions": ["GHOST.md"],
+  "permission": {
+    "edit": {
+      "*": "allow",
+      "Vault/Memory/**": "deny"
+    }
+  }
 }
