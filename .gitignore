@@ -1,3 +1,46 @@
+# Private backups and test audio
+Vault_backup/
+*.wav
+*.log
+*.bak
+
+# Machine-specific, regenerates on first recall
+Vault/Memory/.embed_cache.json
+
+# Local backups — not needed remotely
+Vault/Memory/.history/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# OS junk
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Environment
+.env
+# Obsidian local settings (machine-specific)
+Vault/.obsidian/
+**/.obsidian/
+
+# Ghost brain scratch folder (if not wanted)
+ghost brain/
+
+# PES / gaming scripts (not part of Ghost)
+run-backup.reg
+run_pes_boost_elevated.cmd
+run_ps4_controller_elevated.cmd
+
+
+
 # Machine-specific, regenerates on first recall
 Vault/Memory/.embed_cache.json
 
